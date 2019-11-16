@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class MainFragment extends Fragment {
     private TextView weatherDescription;
     private TextView tempDisplay;
     private TextView showWeatherFor;
+    private Button showForecastButton;
 
 
     private static DecimalFormat df2 = new DecimalFormat("#.##");
@@ -73,6 +76,11 @@ public class MainFragment extends Fragment {
         weatherDescription = view.findViewById(R.id.weather_description);
         tempDisplay = view.findViewById(R.id.temp_display);
         showWeatherFor = view.findViewById(R.id.showing_weather_for);
+        showForecastButton = view.findViewById(R.id.show_forecast_button);
+
+        showForecastButton.setVisibility(View.GONE);
+
+
 
         showWeather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +100,20 @@ public class MainFragment extends Fragment {
     }
 
     private void getWeather(final String city) {
+
+        showForecastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ForecastFragment forecastFragment = ForecastFragment.newInstance(city);
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.fragment_container, forecastFragment);
+                ft.addToBackStack(null);
+                ft.commit();
+
+            }
+        });
 
         String showWeatherForText = "Showing weather for " + city;
         Log.d(TAG, showWeatherForText);
@@ -121,6 +143,8 @@ public class MainFragment extends Fragment {
                             Log.d(TAG, "temp for "+city + " is " + df2.format(tempF));
                             tempDisplay.setText(df2.format(tempF) + "f");
 
+                            showForecastButton.setVisibility(View.VISIBLE);
+
 
                         } catch (JSONException e) {
                             Log.e(TAG, "Error processing JSON resposne", e);
@@ -134,6 +158,7 @@ public class MainFragment extends Fragment {
                         showWeatherFor.setText(wrongCity);
                         weatherDescription.setText("");
                         tempDisplay.setText("");
+                        showForecastButton.setVisibility(View.GONE);
                         Log.e(TAG, "Error fetching data from compliment server", error);
 
                     }

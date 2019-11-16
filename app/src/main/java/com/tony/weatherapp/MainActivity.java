@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener {
 
     private String WEATHER_KEY = "9db10307657b0ff8224b0da642ac57f7";
     private String TAG = "MAIN_ACTIVITY";
