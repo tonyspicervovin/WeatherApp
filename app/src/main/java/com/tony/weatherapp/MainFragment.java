@@ -138,8 +138,8 @@ public class MainFragment extends Fragment {
                             weatherDescription.setText(description);
 
                             JSONObject main = response.getJSONObject("main");
-                            Double tempK = main.getDouble("temp");
-                            Double tempF = (tempK - 273.15) * 9/5 + 32;
+                            double tempK = main.getDouble("temp");
+                            double tempF = (tempK - 273.15) * 9/5 + 32;
                             Log.d(TAG, "temp for "+city + " is " + df2.format(tempF));
                             tempDisplay.setText(df2.format(tempF) + "f");
 
