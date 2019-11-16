@@ -19,13 +19,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 
 public class MainFragment extends Fragment {
@@ -34,10 +35,16 @@ public class MainFragment extends Fragment {
     private Button showWeather;
     private EditText getCity;
     private TextView weatherDescription;
+    private TextView tempDisplay;
+    private TextView showWeatherFor;
+
+
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
     private static String TAG = "MAIN_FRAGMENT";
-    private static String url = "http://api.openweathermap.org/data/2.5/weather?q=minneapolis&appid=9db10307657b0ff8224b0da642ac57f7";
+    private static String wrongCity = "Not a valid city";
 
+    private static String key = BuildConfig.OPENWEATHER_KEY;
     public MainFragment() {
         // Required empty public constructor
     }
@@ -64,6 +71,8 @@ public class MainFragment extends Fragment {
         showWeather = view.findViewById(R.id.show_weather_button);
         getCity = view.findViewById(R.id.get_city);
         weatherDescription = view.findViewById(R.id.weather_description);
+        tempDisplay = view.findViewById(R.id.temp_display);
+        showWeatherFor = view.findViewById(R.id.showing_weather_for);
 
         showWeather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +81,7 @@ public class MainFragment extends Fragment {
                 if (city.isEmpty()) {
                     Toast.makeText(MainFragment.this.getContext(), "Enter a city", Toast.LENGTH_SHORT).show();
                 }else {
-                    getWeather();
+                    getWeather(city);
 
                 }
             }
@@ -82,9 +91,16 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void getWeather() {
+    private void getWeather(final String city) {
+
+        String showWeatherForText = "Showing weather for " + city;
+        Log.d(TAG, showWeatherForText);
+
+        showWeatherFor.setText(showWeatherForText);
+
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=" + key;
 
 
         JsonObjectRequest weatherRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -96,8 +112,15 @@ public class MainFragment extends Fragment {
                             JSONArray jsonArray = response.getJSONArray("weather");
                             JSONObject jsonObject = jsonArray.getJSONObject(0);
                             String description = jsonObject.getString("description");
-                            Log.d(TAG, "description is " + description);
+                            Log.d(TAG, "description for " + city + " is " + description);
                             weatherDescription.setText(description);
+
+                            JSONObject main = response.getJSONObject("main");
+                            Double tempK = main.getDouble("temp");
+                            Double tempF = (tempK - 273.15) * 9/5 + 32;
+                            Log.d(TAG, "temp for "+city + " is " + df2.format(tempF));
+                            tempDisplay.setText(df2.format(tempF) + "f");
+
 
                         } catch (JSONException e) {
                             Log.e(TAG, "Error processing JSON resposne", e);
@@ -107,7 +130,12 @@ public class MainFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainFragment.this.getContext(), "Enter a valid city", Toast.LENGTH_SHORT).show();
+                        showWeatherFor.setText(wrongCity);
+                        weatherDescription.setText("");
+                        tempDisplay.setText("");
                         Log.e(TAG, "Error fetching data from compliment server", error);
+
                     }
                 }
         );
