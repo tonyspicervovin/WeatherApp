@@ -14,7 +14,15 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener {
 
 
+
     private String TAG = "MAIN_ACTIVITY";
+
+    private Button mShowWeather;
+    private EditText mGetCity;
+
+
+
+
 
 
     public MainActivity() {

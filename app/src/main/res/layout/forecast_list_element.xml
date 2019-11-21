@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wish_list_item_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/whatDayTextView"
+        android:layout_width="557dp"
+        android:layout_height="wrap_content"
+        android:text="@string/textview"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dayTemp"
+        android:layout_width="557dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/dayDescription"
+        android:layout_width="557dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/weatherIcon"
+        android:layout_width="75dp"
+        android:layout_height="67dp"
+        android:contentDescription="TODO"
+        app:srcCompat="@drawable/weather" />
+
+</LinearLayout>

@@ -1,8 +1,11 @@
 package com.tony.weatherapp;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +35,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 
 public class MainFragment extends Fragment {
 
@@ -40,6 +47,12 @@ public class MainFragment extends Fragment {
     private TextView tempDisplay;
     private TextView showWeatherFor;
     private Button showForecastButton;
+    private ImageView weatherView;
+
+    private Drawable cloudyDrawable;
+    private Drawable snowyDrawable;
+    private Drawable sunnyDrawable;
+    private Drawable rainyDrawable;
 
 
     private static DecimalFormat df2 = new DecimalFormat("#.##");
@@ -77,8 +90,15 @@ public class MainFragment extends Fragment {
         tempDisplay = view.findViewById(R.id.temp_display);
         showWeatherFor = view.findViewById(R.id.showing_weather_for);
         showForecastButton = view.findViewById(R.id.show_forecast_button);
+        weatherView = view.findViewById(R.id.weatherView);
+
+        cloudyDrawable =getResources().getDrawable(R.drawable.cloudy);
+        snowyDrawable = getResources().getDrawable(R.drawable.snowy);
+        sunnyDrawable = getResources().getDrawable(R.drawable.sunny);
+        rainyDrawable = getResources().getDrawable(R.drawable.rain);
 
         showForecastButton.setVisibility(View.GONE);
+        weatherView.setVisibility(View.GONE);
 
 
 
@@ -104,6 +124,8 @@ public class MainFragment extends Fragment {
         showForecastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
 
                 ForecastFragment forecastFragment = ForecastFragment.newInstance(city);
                 FragmentManager fm = getFragmentManager();
@@ -144,6 +166,24 @@ public class MainFragment extends Fragment {
                             tempDisplay.setText(df2.format(tempF) + "f");
 
                             showForecastButton.setVisibility(View.VISIBLE);
+                            if (description.contains("clear")) {
+                                Log.d(TAG, "It's clear");
+                                weatherView.setImageDrawable(sunnyDrawable);
+                            }
+                            else if (description.contains("rain")) {
+                                Log.d(TAG, "It's rainy");
+                                weatherView.setImageDrawable(rainyDrawable);
+                            }else if (description.contains("snow")) {
+                                Log.d(TAG, "It's snowy");
+                                weatherView.setImageDrawable(snowyDrawable);
+                            }else if (description.contains("cloud")) {
+                                Log.d(TAG, "It's cloudy");
+                                weatherView.setImageDrawable(cloudyDrawable);
+                            }
+                            weatherView.setVisibility(View.VISIBLE);
+                            if (description.isEmpty()){
+                                weatherView.setVisibility(View.GONE);
+                            }
 
 
                         } catch (JSONException e) {
