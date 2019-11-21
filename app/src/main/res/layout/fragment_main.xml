@@ -12,10 +12,13 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="48dp"
         android:text="@string/city_description"
+        android:textColor="#5A3735"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,8 +28,8 @@
         android:id="@+id/get_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginLeft="96dp"
         android:layout_marginTop="104dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -41,9 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="124dp"
         android:layout_marginLeft="124dp"
-        android:layout_marginTop="192dp"
+        android:layout_marginTop="164dp"
         android:outlineAmbientShadowColor="#E91E63"
         android:text="Show Weather"
+        style="@style/Widget.AppCompat.Button.Colored"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -93,12 +97,13 @@
 
     <TextView
         android:id="@+id/showing_weather_for"
-        android:layout_width="247dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginLeft="108dp"
-        android:layout_marginTop="252dp"
+        android:layout_width="344dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="232dp"
         android:text="Showing weather for"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,8 +113,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="124dp"
         android:layout_marginLeft="124dp"
-        android:layout_marginTop="456dp"
+        android:layout_marginTop="384dp"
+        android:outlineAmbientShadowColor="#E91E63"
         android:text="Show Forecast"
+        style="@style/Widget.AppCompat.Button.Colored"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/weatherView"
+        android:layout_width="140dp"
+        android:layout_height="171dp"
+        android:layout_marginTop="432dp"
+        android:src="@drawable/weather"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
