@@ -5,13 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,29 +19,27 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.tony.weatherapp.model.Day;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ForecastFragment extends Fragment {
 
     private static final String TAG = "FORECAST_FRAGMENT";
-    private TextView forecastCity;
-    private TextView temp1;
-    private TextView desc1;
-    private TextView temp2;
-    private TextView desc2;
-    private TextView temp3;
-    private TextView desc3;
-    private TextView temp4;
-    private TextView desc4;
-    private TextView temp5;
-    private TextView desc5;
 
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mlayoutManager;
+
+    private List<Day> mDays;
 
     private static String key = BuildConfig.OPENWEATHER_KEY;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
@@ -87,19 +85,17 @@ public class ForecastFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        forecastCity = view.findViewById(R.id.display_forecast_city);
-        temp1 = view.findViewById(R.id.temp1);
-        desc1 = view.findViewById(R.id.desc1);
-        temp2 = view.findViewById(R.id.temp2);
-        desc2 = view.findViewById(R.id.desc2);
-        temp3 = view.findViewById(R.id.temp3);
-        desc3 = view.findViewById(R.id.desc3);
-        temp4 = view.findViewById(R.id.temp4);
-        desc4 = view.findViewById(R.id.desc4);
-        temp5 = view.findViewById(R.id.temp5);
-        desc5 = view.findViewById(R.id.desc5);
+        mDays = new ArrayList<>();
 
-        forecastCity.setText(HEADER+city);
+        mRecyclerView = view.findViewById(R.id.forecast_list);
+        mRecyclerView.setHasFixedSize(true);
+        mlayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mlayoutManager);
+
+        mAdapter = new ForecastListAdapter(mDays);
+        mRecyclerView.setAdapter(mAdapter);
+
+
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
@@ -137,41 +133,49 @@ public class ForecastFragment extends Fragment {
                                     dayCount++;
                                     hourCount = 0;
                                     if (dayCount == 1) {
+                                        Log.d(TAG, String.valueOf(dayCount));
                                         avgDay1 = sum/8;
-                                        temp1.setText(df2.format(avgDay1) + "f");
-                                        desc1.setText(description);
+                                        String whatDay = String.valueOf("Day " + dayCount);
+                                        mDays.add(new Day(description, avgDay1, whatDay));
+                                        mAdapter.notifyItemInserted(mDays.size() - 1);
                                         sum = 0;
                                     }
                                     if (dayCount == 2) {
                                         avgDay2 = sum/8;
-                                        temp2.setText(df2.format(avgDay2) + "f");
-                                        desc2.setText(description);
+                                        String whatDay = String.valueOf("Day " + dayCount);
+                                        mDays.add(new Day(description, avgDay2, whatDay));
+                                        mAdapter.notifyItemInserted(mDays.size() - 1);
                                         sum = 0;
                                     }
                                     if (dayCount == 3) {
                                         avgDay3 = sum/8;
-                                        temp3.setText(df2.format(avgDay3) + "f");
-                                        desc3.setText(description);
+                                        String whatDay = String.valueOf("Day " + dayCount);
+                                        mDays.add(new Day(description, avgDay3, whatDay));
+                                        mAdapter.notifyItemInserted(mDays.size() - 1);
                                         sum = 0;
                                     }
                                     if (dayCount == 4) {
                                         avgDay4 = sum/8;
-                                        temp4.setText(df2.format(avgDay4) + "f");
-                                        desc4.setText(description);
+                                        String whatDay = String.valueOf("Day " + dayCount);
+                                        mDays.add(new Day(description, avgDay4, whatDay));
+                                        mAdapter.notifyItemInserted(mDays.size() - 1);
                                         sum = 0;
                                     }
                                     if (dayCount == 5) {
                                         avgDay5 = sum/8;
-                                        temp5.setText(df2.format(avgDay5) + "f");
-                                        desc5.setText(description);
+                                        String whatDay = String.valueOf("Day " + dayCount);
+                                        mDays.add(new Day(description, avgDay5, whatDay));
+                                        mAdapter.notifyItemInserted(mDays.size() - 1);
                                         sum = 0;
                                     }
                                 }
                             }
 
 
+                            for (int i = 0; i < mDays.size(); i++) {
+                                Log.d(TAG, mDays.get(i).getDescription());
 
-
+                            }
                         } catch (JSONException e) {
                             Log.e(TAG, "Error processing JSON response", e);
                         }
@@ -226,3 +230,5 @@ public class ForecastFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 }
+
+
