@@ -1,23 +1,45 @@
 package com.tony.weatherapp.model;
 
+import java.util.Date;
+
 public class Day {
 
     private String description;
-    private double temp;
-    private String whatDay;
+    private double tempMax;
 
-    public String getWhatDay() {
-        return whatDay;
+    public double getTempMax() {
+        return tempMax;
     }
 
-    public void setWhatDay(String whatDay) {
-        this.whatDay = whatDay;
+    public void setTempMax(double tempMax) {
+        this.tempMax = tempMax;
     }
 
-    public Day(String description, double temp, String whatDay) {
+    public double getTempMin() {
+        return tempMin;
+    }
+
+    public void setTempMin(double tempMin) {
+        this.tempMin = tempMin;
+    }
+
+    private double tempMin;
+    private Date date;
+
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Day(String description, double tempMin, double tempMax, Date date) {
         this.description = description;
-        this.temp = temp;
-        this.whatDay = whatDay;
+        this.tempMin = tempMin;
+        this.tempMax = tempMax;
+        this.date = date;
     }
 
     public String getDescription() {
@@ -28,19 +50,8 @@ public class Day {
         this.description = description;
     }
 
-    public double getTemp() {
-        return temp;
-    }
 
-    public void setTemp(double temp) {
-        this.temp = temp;
-    }
 
-    @Override
-    public String toString() {
-        return "Day{" +
-                "description='" + description + '\'' +
-                ", temp=" + temp +
-                '}';
-    }
+
+
 }

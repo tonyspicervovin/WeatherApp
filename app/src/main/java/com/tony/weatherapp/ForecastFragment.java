@@ -25,8 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -101,84 +103,43 @@ public class ForecastFragment extends Fragment {
 
         String url = "http://api.openweathermap.org/data/2.5/forecast?q="+city+",usa&appid=" + key;
 
-        Log.d(TAG, url);
 
+        Log.d(TAG, url);
         JsonObjectRequest weatherRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        double avgDay1 = 0;
-                        double avgDay2 = 0;
-                        double avgDay3 = 0;
-                        double avgDay4 = 0;
-                        double avgDay5 = 0;
 
-                        int hourCount = 0;
-                        int dayCount = 0;
-
-                        double sum = 0;
 
                         try {
                             JSONArray jsonArray = response.getJSONArray("list");
                             for (int i = 0; i < jsonArray.length() ; i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
+
+                                int unixStamp = obj.getInt("dt");
+                                java.util.Date date =new java.util.Date((long)unixStamp*1000);
+
+
                                 JSONObject obj2 = obj.getJSONObject("main");
-                                double tempK = obj2.getDouble("temp");
-                                double tempF = (tempK - 273.15) * 9/5 + 32;
-                                sum = sum + tempF;
+
+                                double tempKMin = obj2.getDouble("temp_min");
+                                double tempFMin = (tempKMin - 273.15) * 9/5 + 32;
+
+                                double tempKMax = obj2.getDouble("temp_max");
+                                double tempFMax = (tempKMax - 273.15) * 9/5 + 32;
+
                                 JSONArray weather = obj.getJSONArray("weather");
                                 JSONObject obj3 = weather.getJSONObject(0);
                                 String description = obj3.getString("description");
-                                hourCount++;
-                                if (hourCount == 7) {
-                                    dayCount++;
-                                    hourCount = 0;
-                                    if (dayCount == 1) {
-                                        Log.d(TAG, String.valueOf(dayCount));
-                                        avgDay1 = sum/8;
-                                        String whatDay = String.valueOf("Day " + dayCount);
-                                        mDays.add(new Day(description, avgDay1, whatDay));
-                                        mAdapter.notifyItemInserted(mDays.size() - 1);
-                                        sum = 0;
-                                    }
-                                    if (dayCount == 2) {
-                                        avgDay2 = sum/8;
-                                        String whatDay = String.valueOf("Day " + dayCount);
-                                        mDays.add(new Day(description, avgDay2, whatDay));
-                                        mAdapter.notifyItemInserted(mDays.size() - 1);
-                                        sum = 0;
-                                    }
-                                    if (dayCount == 3) {
-                                        avgDay3 = sum/8;
-                                        String whatDay = String.valueOf("Day " + dayCount);
-                                        mDays.add(new Day(description, avgDay3, whatDay));
-                                        mAdapter.notifyItemInserted(mDays.size() - 1);
-                                        sum = 0;
-                                    }
-                                    if (dayCount == 4) {
-                                        avgDay4 = sum/8;
-                                        String whatDay = String.valueOf("Day " + dayCount);
-                                        mDays.add(new Day(description, avgDay4, whatDay));
-                                        mAdapter.notifyItemInserted(mDays.size() - 1);
-                                        sum = 0;
-                                    }
-                                    if (dayCount == 5) {
-                                        avgDay5 = sum/8;
-                                        String whatDay = String.valueOf("Day " + dayCount);
-                                        mDays.add(new Day(description, avgDay5, whatDay));
-                                        mAdapter.notifyItemInserted(mDays.size() - 1);
-                                        sum = 0;
+
+                                mDays.add(new Day(description, tempFMin, tempFMax, date));
+                                mAdapter.notifyItemInserted(mDays.size() - 1);
+
+
                                     }
                                 }
-                            }
-
-
-                            for (int i = 0; i < mDays.size(); i++) {
-                                Log.d(TAG, mDays.get(i).getDescription());
-
-                            }
-                        } catch (JSONException e) {
+                        catch (JSONException e) {
                             Log.e(TAG, "Error processing JSON response", e);
                         }
                     }

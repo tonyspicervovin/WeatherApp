@@ -33,7 +33,7 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
         LinearLayout layout;
         TextView tempTextView;
         TextView descriptionTextView;
-        TextView whatDayTextView;
+        TextView whatDateTextView;
         ImageView weatherIcon;
 
         Drawable cloudyDrawable;
@@ -47,9 +47,9 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
         ForecastListViewHolder(LinearLayout layout) {
             super(layout);
             this.layout = layout;
-            tempTextView = layout.findViewById(R.id.dayTemp);
+            tempTextView = layout.findViewById(R.id.dateTemp);
             descriptionTextView = layout.findViewById(R.id.dayDescription);
-            whatDayTextView = layout.findViewById(R.id.whatDayTextView);
+            whatDateTextView = layout.findViewById(R.id.whatDateTextView);
             weatherIcon = layout.findViewById(R.id.weatherIcon);
 
             cloudyDrawable = layout.getResources().getDrawable(R.drawable.cloudy);
@@ -76,10 +76,14 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
     public void onBindViewHolder(@NonNull ForecastListAdapter.ForecastListViewHolder holder, int position) {
 
         Day day = data.get(position);
-        String temp = df2.format(day.getTemp());
-        String whatDay = String.valueOf(day.getWhatDay());
-        holder.whatDayTextView.setText(whatDay);
-        holder.tempTextView.setText(temp + " f");
+        String tempMin = df2.format(day.getTempMin());
+        String tempMax =df2.format(day.getTempMax());
+
+        String showTemp = ("Min temp " + tempMin + "f" + " Max Temp " + tempMax + "f");
+
+
+        holder.tempTextView.setText(showTemp);
+        holder.whatDateTextView.setText(day.getDate().toString());
         holder.descriptionTextView.setText(day.getDescription());
         if (day.getDescription().contains("clear")) {
             Log.d(TAG, "It's clear");
@@ -95,6 +99,8 @@ public class ForecastListAdapter extends RecyclerView.Adapter<ForecastListAdapte
             Log.d(TAG, "It's cloudy");
             holder.weatherIcon.setImageDrawable(holder.cloudyDrawable);
         }
+
+        //showing different icons for different weather descriptions
 
 
 

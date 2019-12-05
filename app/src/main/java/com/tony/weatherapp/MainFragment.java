@@ -92,13 +92,19 @@ public class MainFragment extends Fragment {
         showForecastButton = view.findViewById(R.id.show_forecast_button);
         weatherView = view.findViewById(R.id.weatherView);
 
+        //finding widgets
+
         cloudyDrawable =getResources().getDrawable(R.drawable.cloudy);
         snowyDrawable = getResources().getDrawable(R.drawable.snowy);
         sunnyDrawable = getResources().getDrawable(R.drawable.sunny);
         rainyDrawable = getResources().getDrawable(R.drawable.rain);
 
+        //finding drawables for weather icon
+
         showForecastButton.setVisibility(View.GONE);
         weatherView.setVisibility(View.GONE);
+
+        //setting forecast button and weather icon invisible initially
 
 
 
@@ -110,8 +116,8 @@ public class MainFragment extends Fragment {
                     Toast.makeText(MainFragment.this.getContext(), "Enter a city", Toast.LENGTH_SHORT).show();
                 }else {
                     getWeather(city);
-
                 }
+                //listener for showing weather, if it's empty it shows a toast msg
             }
         });
 
@@ -134,6 +140,7 @@ public class MainFragment extends Fragment {
                 ft.addToBackStack(null);
                 ft.commit();
 
+                //switching to forecast fragment if show forecast button is pressed
             }
         });
 
@@ -159,13 +166,20 @@ public class MainFragment extends Fragment {
                             Log.d(TAG, "description for " + city + " is " + description);
                             weatherDescription.setText(description);
 
+                            //pulling weather description from api
+
                             JSONObject main = response.getJSONObject("main");
                             double tempK = main.getDouble("temp");
                             double tempF = (tempK - 273.15) * 9/5 + 32;
                             Log.d(TAG, "temp for "+city + " is " + df2.format(tempF));
                             tempDisplay.setText(df2.format(tempF) + "f");
 
+                            //pulling temp from api and converting to f
+
                             showForecastButton.setVisibility(View.VISIBLE);
+
+                            //showing the forecast button if the api hit successfully
+
                             if (description.contains("clear")) {
                                 Log.d(TAG, "It's clear");
                                 weatherView.setImageDrawable(sunnyDrawable);
@@ -180,9 +194,15 @@ public class MainFragment extends Fragment {
                                 Log.d(TAG, "It's cloudy");
                                 weatherView.setImageDrawable(cloudyDrawable);
                             }
+
+                            // changing the icon based on what weather description is returned
+
                             weatherView.setVisibility(View.VISIBLE);
+                            //showing weather icon
+
                             if (description.isEmpty()){
                                 weatherView.setVisibility(View.GONE);
+                                //hiding icon if nothing comes back
                             }
 
 
@@ -200,6 +220,8 @@ public class MainFragment extends Fragment {
                         tempDisplay.setText("");
                         showForecastButton.setVisibility(View.GONE);
                         Log.e(TAG, "Error fetching data from compliment server", error);
+
+                        //if no response clearing weather info and showing a msg
 
                     }
                 }
